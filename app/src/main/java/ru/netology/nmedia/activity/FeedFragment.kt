@@ -56,7 +56,10 @@ class FeedFragment : Fragment() {
             }
 
             override fun onPhoto(post: Post) {
-                findNavController().navigate(R.id.action_feedFragment_to_photoFragment)
+                val bundle = Bundle().apply {
+                    putString("url" ,post.attachment?.url)
+                }
+                findNavController().navigate(R.id.action_feedFragment_to_photoFragment,bundle)
             }
         })
         binding.list.adapter = adapter
@@ -83,10 +86,7 @@ class FeedFragment : Fragment() {
                 binding1.photoContainer.visibility = View.GONE
                 return@observe
             }
-
-            binding1.photoContainer.visibility = View.VISIBLE
             binding1.photo.setImageURI(it.uri)
-
         }
 
         binding.swiperefresh.setOnRefreshListener {

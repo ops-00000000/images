@@ -8,10 +8,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import ru.netology.nmedia.BuildConfig
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
 import ru.netology.nmedia.dto.Post
+import ru.netology.nmedia.enumeration.AttachmentType
 import ru.netology.nmedia.view.loadCircleCrop
 import ru.netology.nmedia.viewmodel.PostViewModel
 
@@ -50,6 +52,24 @@ class PostViewHolder(
             avatar.loadCircleCrop("${BuildConfig.BASE_URL}/avatars/${post.authorAvatar}")
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
+
+
+
+
+                if(post.attachment?.url != null && post.attachment.type == AttachmentType.IMAGE) {
+                    val posturl = post.attachment.url
+                    val url = "${BuildConfig.BASE_URL}/media/$posturl"
+                    binding.photoContainer.visibility = View.VISIBLE
+                    Glide.with(binding.photo)
+                        .load(url)
+                        .error(R.drawable.ic_baseline_error_outline_24)
+                        .timeout(10_000)
+                        .into(binding.photo)
+                }
+
+
+
+
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
